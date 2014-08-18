@@ -12,6 +12,11 @@
 
   <name>Plexus I18N Component</name>
 
+  <scm>
+    <connection>scn:git:git@github.com:sonatype/plexus-i18n.git</connection>
+    <developerConnection>scn:git:git@github.com:sonatype/plexus-i18n.git</developerConnection>
+  </scm>
+
   <dependencies>
     <dependency>
       <groupId>org.codehaus.plexus</groupId>
