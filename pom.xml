@@ -13,9 +13,15 @@
   <name>Plexus I18N Component</name>
 
   <scm>
-    <connection>scm:git:git@github.com:sonatype/plexus-i18n.git</connection>
-    <developerConnection>scm:git:git@github.com:sonatype/plexus-i18n.git</developerConnection>
+    <connection>scm:git:git@github.com:codehaus-plexus/plexus-i18n.git</connection>
+    <developerConnection>scm:git:git@github.com:codehaus-plexus/plexus-i18n.git</developerConnection>
+      <url>http://github.com/codehaus-plexus/plexus-i18n</url>
+    <tag>HEAD</tag>
   </scm>
+  <issueManagement>
+    <system>github</system>
+    <url>http://github.com/codehaus-plexus/plexus-i18n/issues</url>
+  </issueManagement>
 
   <dependencies>
     <dependency>
