@@ -16,27 +16,24 @@ package org.codehaus.plexus.i18n;
  * limitations under the License.
  */
 
-import org.codehaus.plexus.logging.AbstractLogEnabled;
-import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
-import org.codehaus.plexus.personality.plexus.lifecycle.phase.InitializationException;
-import org.codehaus.plexus.util.StringUtils;
-
+import java.lang.reflect.Field;
 import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
-import java.lang.reflect.Field;
+
+import org.codehaus.plexus.logging.AbstractLogEnabled;
+import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
+import org.codehaus.plexus.personality.plexus.lifecycle.phase.InitializationException;
+import org.codehaus.plexus.util.StringUtils;
 
 /**
  * @plexus.component
  *   role="org.codehaus.plexus.i18n.I18N"
  */
-public class DefaultI18N
-    extends AbstractLogEnabled
-    implements I18N, Initializable
-{
+public class DefaultI18N extends AbstractLogEnabled implements I18N, Initializable {
     private static final Object[] NO_ARGS = new Object[0];
 
     private HashMap bundles;
@@ -57,34 +54,28 @@ public class DefaultI18N
     // Accessors
     // ----------------------------------------------------------------------
 
-    public String getDefaultLanguage()
-    {
+    public String getDefaultLanguage() {
         return defaultLanguage;
     }
 
-    public String getDefaultCountry()
-    {
+    public String getDefaultCountry() {
         return defaultCountry;
     }
 
-    public String getDefaultBundleName()
-    {
+    public String getDefaultBundleName() {
         return defaultBundleName;
     }
 
-    public String[] getBundleNames()
-    {
+    public String[] getBundleNames() {
         return (String[]) bundleNames.clone();
     }
 
-    public ResourceBundle getBundle()
-    {
-        return getBundle( getDefaultBundleName(), (Locale) null );
+    public ResourceBundle getBundle() {
+        return getBundle(getDefaultBundleName(), (Locale) null);
     }
 
-    public ResourceBundle getBundle( String bundleName )
-    {
-        return getBundle( bundleName, (Locale) null );
+    public ResourceBundle getBundle(String bundleName) {
+        return getBundle(bundleName, (Locale) null);
     }
 
     /**
@@ -96,9 +87,8 @@ public class DefaultI18N
      * @param languageHeader A String with the language header.
      * @return A localized ResourceBundle.
      */
-    public ResourceBundle getBundle( String bundleName, String languageHeader )
-    {
-        return getBundle( bundleName, getLocale( languageHeader ) );
+    public ResourceBundle getBundle(String bundleName, String languageHeader) {
+        return getBundle(bundleName, getLocale(languageHeader));
     }
 
     /**
@@ -111,66 +101,56 @@ public class DefaultI18N
      *                   indicated by the default language and country).
      * @return A localized ResourceBundle.
      */
-    public ResourceBundle getBundle( String bundleName, Locale locale )
-    {
+    public ResourceBundle getBundle(String bundleName, Locale locale) {
         // Assure usable inputs.
-        bundleName = ( bundleName == null ? getDefaultBundleName() : bundleName.trim() );
+        bundleName = (bundleName == null ? getDefaultBundleName() : bundleName.trim());
 
         // ----------------------------------------------------------------------
         // A hack to make sure the properties files are always checked
         // ----------------------------------------------------------------------
 
-        if ( devMode )
-        {
-            try
-            {
-                Class klass = ResourceBundle.getBundle( bundleName ).getClass().getSuperclass();
+        if (devMode) {
+            try {
+                Class klass = ResourceBundle.getBundle(bundleName).getClass().getSuperclass();
 
-                Field field = klass.getDeclaredField( "cacheList" );
+                Field field = klass.getDeclaredField("cacheList");
 
-                field.setAccessible( true );
+                field.setAccessible(true);
 
-//                SoftCache cache = (SoftCache) field.get( null );
-//
-//                cache.clear();
+                //                SoftCache cache = (SoftCache) field.get( null );
+                //
+                //                cache.clear();
 
-                Object cache = field.get( null );
+                Object cache = field.get(null);
 
-                cache.getClass().getDeclaredMethod( "clear", null ).invoke( cache, null );
+                cache.getClass().getDeclaredMethod("clear", null).invoke(cache, null);
 
-                field.setAccessible( false );
-            }
-            catch ( Exception e )
-            {
+                field.setAccessible(false);
+            } catch (Exception e) {
                 // Intentional
             }
         }
 
-        if ( locale == null )
-        {
-            locale = getLocale( null );
+        if (locale == null) {
+            locale = getLocale(null);
         }
 
         // Find/retrieve/cache bundle.
         ResourceBundle rb;
 
-        HashMap bundlesByLocale = (HashMap) bundles.get( bundleName );
+        HashMap bundlesByLocale = (HashMap) bundles.get(bundleName);
 
-        if ( bundlesByLocale != null )
-        {
+        if (bundlesByLocale != null) {
             // Cache of bundles by locale for the named bundle exists.
             // Check the cache for a bundle corresponding to locale.
-            rb = (ResourceBundle) bundlesByLocale.get( locale );
+            rb = (ResourceBundle) bundlesByLocale.get(locale);
 
-            if ( rb == null )
-            {
+            if (rb == null) {
                 // Not yet cached.
-                rb = cacheBundle( bundleName, locale );
+                rb = cacheBundle(bundleName, locale);
             }
-        }
-        else
-        {
-            rb = cacheBundle( bundleName, locale );
+        } else {
+            rb = cacheBundle(bundleName, locale);
         }
 
         return rb;
@@ -179,14 +159,11 @@ public class DefaultI18N
     /**
      * @see I18N#getLocale(String)
      */
-    public Locale getLocale( String header )
-    {
-        if ( !StringUtils.isEmpty( header ) )
-        {
-            I18NTokenizer tok = new I18NTokenizer( header );
+    public Locale getLocale(String header) {
+        if (!StringUtils.isEmpty(header)) {
+            I18NTokenizer tok = new I18NTokenizer(header);
 
-            if ( tok.hasNext() )
-            {
+            if (tok.hasNext()) {
                 return (Locale) tok.next();
             }
         }
@@ -195,50 +172,42 @@ public class DefaultI18N
         return defaultLocale;
     }
 
-    public String getString( String key )
-    {
-        return getString( key, null );
+    public String getString(String key) {
+        return getString(key, null);
     }
 
-    public String getString( String key, Locale locale )
-    {
-        return getString( getDefaultBundleName(), locale, key );
+    public String getString(String key, Locale locale) {
+        return getString(getDefaultBundleName(), locale, key);
     }
 
     /**
      * @throws MissingResourceException Specified key cannot be matched.
      * @see I18N#getString(String, Locale, String)
      */
-    public String getString( String bundleName, Locale locale, String key )
-    {
+    public String getString(String bundleName, Locale locale, String key) {
         String value;
 
-        if ( locale == null )
-        {
-            locale = getLocale( null );
+        if (locale == null) {
+            locale = getLocale(null);
         }
 
         // Look for text in requested bundle.
-        ResourceBundle rb = getBundle( bundleName, locale );
+        ResourceBundle rb = getBundle(bundleName, locale);
 
-        value = getStringOrNull( rb, key );
+        value = getStringOrNull(rb, key);
 
         // Look for text in list of default bundles.
-        if ( value == null && bundleNames.length > 0 )
-        {
+        if (value == null && bundleNames.length > 0) {
             String name;
-            for ( int i = 0; i < bundleNames.length; i++ )
-            {
+            for (int i = 0; i < bundleNames.length; i++) {
                 name = bundleNames[i];
 
-                if ( !name.equals( bundleName ) )
-                {
-                    rb = getBundle( name, locale );
+                if (!name.equals(bundleName)) {
+                    rb = getBundle(name, locale);
 
-                    value = getStringOrNull( rb, key );
+                    value = getStringOrNull(rb, key);
 
-                    if ( value != null )
-                    {
+                    if (value != null) {
                         locale = rb.getLocale();
 
                         break;
@@ -247,13 +216,13 @@ public class DefaultI18N
             }
         }
 
-        if ( value == null )
-        {
+        if (value == null) {
             String loc = locale.toString();
 
-            String mesg = "Noticed missing resource: " + "bundleName=" + bundleName + ", locale=" + loc + ", key=" + key;
+            String mesg =
+                    "Noticed missing resource: " + "bundleName=" + bundleName + ", locale=" + loc + ", key=" + key;
 
-            getLogger().debug( mesg );
+            getLogger().debug(mesg);
 
             // Just send back the key, we don't need to throw an exception.
 
@@ -263,37 +232,26 @@ public class DefaultI18N
         return value;
     }
 
-    public String format( String key, Object arg1 )
-    {
-        return format( defaultBundleName, defaultLocale, key, new Object[]{arg1} );
+    public String format(String key, Object arg1) {
+        return format(defaultBundleName, defaultLocale, key, new Object[] {arg1});
     }
 
-    public String format( String key, Object arg1, Object arg2 )
-    {
-        return format( defaultBundleName, defaultLocale, key, new Object[]{arg1, arg2} );
+    public String format(String key, Object arg1, Object arg2) {
+        return format(defaultBundleName, defaultLocale, key, new Object[] {arg1, arg2});
     }
 
     /**
      * @see I18N#format(String, Locale, String, Object)
      */
-    public String format( String bundleName,
-                          Locale locale,
-                          String key,
-                          Object arg1 )
-    {
-        return format( bundleName, locale, key, new Object[]{arg1} );
+    public String format(String bundleName, Locale locale, String key, Object arg1) {
+        return format(bundleName, locale, key, new Object[] {arg1});
     }
 
     /**
      * @see I18N#format(String, Locale, String, Object, Object)
      */
-    public String format( String bundleName,
-                          Locale locale,
-                          String key,
-                          Object arg1,
-                          Object arg2 )
-    {
-        return format( bundleName, locale, key, new Object[]{arg1, arg2} );
+    public String format(String bundleName, Locale locale, String key, Object arg1, Object arg2) {
+        return format(bundleName, locale, key, new Object[] {arg1, arg2});
     }
 
     /**
@@ -305,18 +263,15 @@ public class DefaultI18N
      * @return Localized, formatted text identified by
      *         <code>key</code>.
      */
-    public String format( String bundleName, Locale locale, String key, Object[] args )
-    {
-        if ( locale == null )
-        {
+    public String format(String bundleName, Locale locale, String key, Object[] args) {
+        if (locale == null) {
             // When formatting Date objects and such, MessageFormat
             // cannot have a null Locale.
-            locale = getLocale( null );
+            locale = getLocale(null);
         }
 
-        String value = getString( bundleName, locale, key );
-        if ( args == null )
-        {
+        String value = getString(bundleName, locale, key);
+        if (args == null) {
             args = NO_ARGS;
         }
 
@@ -324,28 +279,24 @@ public class DefaultI18N
         // this up by providing the Locale along with the string in the
         // constructor to MessageFormat.  Until 1.4, the following workaround
         // is required for constructing the format with the appropriate locale:
-        MessageFormat messageFormat = new MessageFormat( "" );
-        messageFormat.setLocale( locale );
-        messageFormat.applyPattern( value );
+        MessageFormat messageFormat = new MessageFormat("");
+        messageFormat.setLocale(locale);
+        messageFormat.applyPattern(value);
 
-        return messageFormat.format( args );
+        return messageFormat.format(args);
     }
-
 
     /**
      * Called the first time the Service is used.
      */
-    public void initialize()
-        throws InitializationException
-    {
+    public void initialize() throws InitializationException {
         bundles = new HashMap();
 
-        defaultLocale = new Locale( defaultLanguage, defaultCountry );
+        defaultLocale = new Locale(defaultLanguage, defaultCountry);
 
         initializeBundleNames();
 
-        if ( "true".equals( System.getProperty( "PLEXUS_DEV_MODE" ) ) )
-        {
+        if ("true".equals(System.getProperty("PLEXUS_DEV_MODE"))) {
             devMode = true;
         }
     }
@@ -354,27 +305,21 @@ public class DefaultI18N
     // Implementation
     // ----------------------------------------------------------------------
 
-    protected void initializeBundleNames()
-    {
-        //System.err.println("cfg=" + getConfiguration());
-        if ( defaultBundleName != null && defaultBundleName.length() > 0 )
-        {
+    protected void initializeBundleNames() {
+        // System.err.println("cfg=" + getConfiguration());
+        if (defaultBundleName != null && defaultBundleName.length() > 0) {
             // Using old-style single bundle name property.
-            if ( bundleNames == null || bundleNames.length <= 0 )
-            {
-                bundleNames = new String[]{defaultBundleName};
-            }
-            else
-            {
+            if (bundleNames == null || bundleNames.length <= 0) {
+                bundleNames = new String[] {defaultBundleName};
+            } else {
                 // Prepend "default" bundle name.
                 String[] array = new String[bundleNames.length + 1];
                 array[0] = defaultBundleName;
-                System.arraycopy( bundleNames, 0, array, 1, bundleNames.length );
+                System.arraycopy(bundleNames, 0, array, 1, bundleNames.length);
                 bundleNames = array;
             }
         }
-        if ( bundleNames == null )
-        {
+        if (bundleNames == null) {
             bundleNames = new String[0];
         }
     }
@@ -386,39 +331,31 @@ public class DefaultI18N
      *
      * @throws MissingResourceException Bundle not found.
      */
-    private synchronized ResourceBundle cacheBundle( String bundleName, Locale locale )
-        throws MissingResourceException
-    {
-        HashMap bundlesByLocale = (HashMap) bundles.get( bundleName );
+    private synchronized ResourceBundle cacheBundle(String bundleName, Locale locale) throws MissingResourceException {
+        HashMap bundlesByLocale = (HashMap) bundles.get(bundleName);
 
-        ResourceBundle rb = ( bundlesByLocale == null ? null : (ResourceBundle) bundlesByLocale.get( locale ) );
+        ResourceBundle rb = (bundlesByLocale == null ? null : (ResourceBundle) bundlesByLocale.get(locale));
 
-        if ( rb == null )
-        {
-            bundlesByLocale = ( bundlesByLocale == null ? new HashMap( 3 ) : new HashMap( bundlesByLocale ) );
+        if (rb == null) {
+            bundlesByLocale = (bundlesByLocale == null ? new HashMap(3) : new HashMap(bundlesByLocale));
 
-            try
-            {
-                rb = ResourceBundle.getBundle( bundleName, locale );
-            }
-            catch ( MissingResourceException e )
-            {
-                rb = findBundleByLocale( bundleName, locale, bundlesByLocale );
+            try {
+                rb = ResourceBundle.getBundle(bundleName, locale);
+            } catch (MissingResourceException e) {
+                rb = findBundleByLocale(bundleName, locale, bundlesByLocale);
 
-                if ( rb == null )
-                {
+                if (rb == null) {
                     throw (MissingResourceException) e.fillInStackTrace();
                 }
             }
 
-            if ( rb != null )
-            {
+            if (rb != null) {
                 // Cache bundle.
-                bundlesByLocale.put( rb.getLocale(), rb );
+                bundlesByLocale.put(rb.getLocale(), rb);
 
-                HashMap bundlesByName = new HashMap( bundles );
+                HashMap bundlesByName = new HashMap(bundles);
 
-                bundlesByName.put( bundleName, bundlesByLocale );
+                bundlesByName.put(bundleName, bundlesByLocale);
 
                 this.bundles = bundlesByName;
             }
@@ -442,43 +379,30 @@ public class DefaultI18N
      * <p>Since we're really just guessing at possible bundles to use,
      * we don't ever throw <code>MissingResourceException</code>.</p>
      */
-    private ResourceBundle findBundleByLocale( String bundleName,
-                                               Locale locale,
-                                               Map bundlesByLocale )
-    {
+    private ResourceBundle findBundleByLocale(String bundleName, Locale locale, Map bundlesByLocale) {
         ResourceBundle rb = null;
 
-        if ( !StringUtils.isNotEmpty( locale.getCountry() ) &&
-             defaultLanguage.equals( locale.getLanguage() ) )
-        {
+        if (!StringUtils.isNotEmpty(locale.getCountry()) && defaultLanguage.equals(locale.getLanguage())) {
             /*
             category.debug("Requested language '" + locale.getLanguage() +
                            "' matches default: Attempting to guess bundle " +
                            "using default country '" + defaultCountry + '\'');
             */
-            Locale withDefaultCountry = new Locale( locale.getLanguage(),
-                                                    defaultCountry );
-            rb = (ResourceBundle) bundlesByLocale.get( withDefaultCountry );
-            if ( rb == null )
-            {
-                rb = getBundleIgnoreException( bundleName, withDefaultCountry );
+            Locale withDefaultCountry = new Locale(locale.getLanguage(), defaultCountry);
+            rb = (ResourceBundle) bundlesByLocale.get(withDefaultCountry);
+            if (rb == null) {
+                rb = getBundleIgnoreException(bundleName, withDefaultCountry);
             }
-        }
-        else if ( !StringUtils.isNotEmpty( locale.getLanguage() ) &&
-                  defaultCountry.equals( locale.getCountry() ) )
-        {
-            Locale withDefaultLanguage = new Locale( defaultLanguage,
-                                                     locale.getCountry() );
-            rb = (ResourceBundle) bundlesByLocale.get( withDefaultLanguage );
-            if ( rb == null )
-            {
-                rb = getBundleIgnoreException( bundleName, withDefaultLanguage );
+        } else if (!StringUtils.isNotEmpty(locale.getLanguage()) && defaultCountry.equals(locale.getCountry())) {
+            Locale withDefaultLanguage = new Locale(defaultLanguage, locale.getCountry());
+            rb = (ResourceBundle) bundlesByLocale.get(withDefaultLanguage);
+            if (rb == null) {
+                rb = getBundleIgnoreException(bundleName, withDefaultLanguage);
             }
         }
 
-        if ( rb == null && !defaultLocale.equals( locale ) )
-        {
-            rb = getBundleIgnoreException( bundleName, defaultLocale );
+        if (rb == null && !defaultLocale.equals(locale)) {
+            rb = getBundleIgnoreException(bundleName, defaultLocale);
         }
 
         return rb;
@@ -490,38 +414,27 @@ public class DefaultI18N
      * returning <code>null</code> instead of throwing
      * <code>MissingResourceException</code>.
      */
-    private ResourceBundle getBundleIgnoreException( String bundleName, Locale locale )
-    {
-        try
-        {
-            return ResourceBundle.getBundle( bundleName, locale );
-        }
-        catch ( MissingResourceException ignored )
-        {
+    private ResourceBundle getBundleIgnoreException(String bundleName, Locale locale) {
+        try {
+            return ResourceBundle.getBundle(bundleName, locale);
+        } catch (MissingResourceException ignored) {
             return null;
         }
     }
-
 
     /**
      * Gets localized text from a bundle if it's there.  Otherwise,
      * returns <code>null</code> (ignoring a possible
      * <code>MissingResourceException</code>).
      */
-    protected final String getStringOrNull( ResourceBundle rb, String key )
-    {
-        if ( rb != null )
-        {
-            try
-            {
-                return rb.getString( key );
-            }
-            catch ( MissingResourceException ignored )
-            {
+    protected final String getStringOrNull(ResourceBundle rb, String key) {
+        if (rb != null) {
+            try {
+                return rb.getString(key);
+            } catch (MissingResourceException ignored) {
                 // intentional
             }
         }
         return null;
     }
-
 }
