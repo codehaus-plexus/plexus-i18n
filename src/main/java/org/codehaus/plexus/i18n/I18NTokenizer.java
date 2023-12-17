@@ -30,7 +30,7 @@ import java.util.StringTokenizer;
  * @author <a href="mailto:dlr@collab.net">Daniel Rall</a>
  * @version $Id: I18NTokenizer.java 6675 2007-07-20 23:05:53Z olamy $
  *
- * @todo Move this class out of here as its purely web related.
+ * TODO Move this class out of here as its purely web related.
  */
 public class I18NTokenizer implements Iterator {
     /**

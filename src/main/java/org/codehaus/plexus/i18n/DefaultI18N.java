@@ -24,15 +24,16 @@ import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
+import org.codehaus.plexus.component.annotations.Component;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.InitializationException;
 import org.codehaus.plexus.util.StringUtils;
 
 /**
- * @plexus.component
- *   role="org.codehaus.plexus.i18n.I18N"
+ *
  */
+@Component(role = I18N.class)
 public class DefaultI18N extends AbstractLogEnabled implements I18N, Initializable {
     private static final Object[] NO_ARGS = new Object[0];
 
