@@ -30,11 +30,9 @@ import java.util.StringTokenizer;
  * @author <a href="mailto:dlr@collab.net">Daniel Rall</a>
  * @version $Id: I18NTokenizer.java 6675 2007-07-20 23:05:53Z olamy $
  *
- * @todo Move this class out of here as its purely web related.
+ * TODO Move this class out of here as its purely web related.
  */
-public class I18NTokenizer
-    implements Iterator
-{
+public class I18NTokenizer implements Iterator {
     /**
      * Separates elements of the <code>Accept-Language</code> HTTP
      * header.
@@ -63,30 +61,22 @@ public class I18NTokenizer
      * @param header The <code>Accept-Language</code> header
      * (i.e. <code>en, es;q=0.8, zh-TW;q=0.1</code>).
      */
-    public I18NTokenizer(String header)
-    {
+    public I18NTokenizer(String header) {
         StringTokenizer tok = new StringTokenizer(header, LOCALE_SEPARATOR);
-        while (tok.hasMoreTokens())
-        {
+        while (tok.hasMoreTokens()) {
             AcceptLanguage acceptLang = new AcceptLanguage();
             String element = tok.nextToken().trim();
             int index;
 
             // Record and cut off any quality value that comes after a
             // semi-colon.
-            if ( (index = element.indexOf(QUALITY_SEPARATOR)) != -1 )
-            {
+            if ((index = element.indexOf(QUALITY_SEPARATOR)) != -1) {
                 String q = element.substring(index);
                 element = element.substring(0, index);
-                if ( (index = q.indexOf('=')) != -1 )
-                {
-                    try
-                    {
-                        acceptLang.quality =
-                            Float.valueOf(q.substring(index + 1));
-                    }
-                    catch (NumberFormatException useDefault)
-                    {
+                if ((index = q.indexOf('=')) != -1) {
+                    try {
+                        acceptLang.quality = Float.valueOf(q.substring(index + 1));
+                    } catch (NumberFormatException useDefault) {
                     }
                 }
             }
@@ -95,15 +85,11 @@ public class I18NTokenizer
 
             // Create a Locale from the language.  A dash may separate the
             // language from the country.
-            if ( (index = element.indexOf('-')) == -1 )
-            {
+            if ((index = element.indexOf('-')) == -1) {
                 // No dash means no country.
                 acceptLang.locale = new Locale(element, "");
-            }
-            else
-            {
-                acceptLang.locale = new Locale(element.substring(0, index),
-                                               element.substring(index + 1));
+            } else {
+                acceptLang.locale = new Locale(element.substring(0, index), element.substring(index + 1));
             }
 
             locales.add(acceptLang);
@@ -116,8 +102,7 @@ public class I18NTokenizer
     /**
      * @return Whether there are more locales.
      */
-    public boolean hasNext()
-    {
+    public boolean hasNext() {
         return !locales.isEmpty();
     }
 
@@ -128,10 +113,8 @@ public class I18NTokenizer
      * @return The next highest-rated <code>Locale</code>.
      * @throws NoSuchElementException No more locales.
      */
-    public Object next()
-    {
-        if (locales.isEmpty())
-        {
+    public Object next() {
+        if (locales.isEmpty()) {
             throw new NoSuchElementException();
         }
         return ((AcceptLanguage) locales.remove(0)).locale;
@@ -140,18 +123,15 @@ public class I18NTokenizer
     /**
      * Not implemented.
      */
-    public final void remove()
-    {
-        throw new UnsupportedOperationException(getClass().getName() +
-                                                " does not support remove()");
+    public final void remove() {
+        throw new UnsupportedOperationException(getClass().getName() + " does not support remove()");
     }
 
     /**
      * Struct representing an element of the HTTP
      * <code>Accept-Language</code> header.
      */
-    private class AcceptLanguage implements Comparable
-    {
+    private class AcceptLanguage implements Comparable {
         /**
          * The language and country.
          */
@@ -163,9 +143,8 @@ public class I18NTokenizer
          */
         Float quality = DEFAULT_QUALITY;
 
-        public final int compareTo(Object acceptLang)
-        {
-            return quality.compareTo( ((AcceptLanguage) acceptLang).quality );
+        public final int compareTo(Object acceptLang) {
+            return quality.compareTo(((AcceptLanguage) acceptLang).quality);
         }
     }
 }
