@@ -1,10 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <artifactId>plexus-components</artifactId>
     <groupId>org.codehaus.plexus</groupId>
-    <version>6.5</version>
+    <artifactId>plexus</artifactId>
+    <version>16</version>
+    <relativePath />
   </parent>
 
   <artifactId>plexus-i18n</artifactId>
@@ -13,14 +15,14 @@
   <name>Plexus I18N Component</name>
 
   <scm>
-    <connection>scm:git:git@github.com:codehaus-plexus/plexus-i18n.git</connection>
-    <developerConnection>scm:git:git@github.com:codehaus-plexus/plexus-i18n.git</developerConnection>
-      <url>http://github.com/codehaus-plexus/plexus-i18n</url>
+    <connection>scm:git:https://github.com/codehaus-plexus/plexus-i18n.git</connection>
+    <developerConnection>${project.scm.connection}</developerConnection>
     <tag>HEAD</tag>
+    <url>https://github.com/codehaus-plexus/plexus-i18n</url>
   </scm>
   <issueManagement>
     <system>github</system>
-    <url>http://github.com/codehaus-plexus/plexus-i18n/issues</url>
+    <url>https://github.com/codehaus-plexus/plexus-i18n/issues</url>
   </issueManagement>
   <distributionManagement>
     <site>
@@ -37,10 +39,17 @@
     <dependency>
       <groupId>org.codehaus.plexus</groupId>
       <artifactId>plexus-container-default</artifactId>
+      <version>2.1.1</version>
     </dependency>
     <dependency>
       <groupId>org.codehaus.plexus</groupId>
       <artifactId>plexus-utils</artifactId>
+      <version>4.0.0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.plexus</groupId>
+      <artifactId>plexus-xml</artifactId>
+      <version>3.0.0</version>
     </dependency>
   </dependencies>
 
@@ -50,15 +59,17 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-scm-publish-plugin</artifactId>
         <configuration>
-          <content>${project.reporting.outputDirectory}</content><!-- mono-module doesn't require site:stage -->
+          <content>${project.reporting.outputDirectory}</content>
+          <!-- mono-module doesn't require site:stage -->
         </configuration>
         <executions>
           <execution>
             <id>scm-publish</id>
-            <phase>site-deploy</phase><!-- deploy site with maven-scm-publish-plugin -->
+            <!-- deploy site with maven-scm-publish-plugin -->
             <goals>
               <goal>publish-scm</goal>
             </goals>
+            <phase>site-deploy</phase>
           </execution>
         </executions>
       </plugin>
