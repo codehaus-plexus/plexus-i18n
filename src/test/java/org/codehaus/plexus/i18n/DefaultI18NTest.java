@@ -54,9 +54,15 @@ package org.codehaus.plexus.i18n;
  * <http://www.codehaus.org/>.
  */
 
+import javax.inject.Inject;
+
 import java.util.Locale;
 
-import org.codehaus.plexus.PlexusTestCase;
+import org.codehaus.plexus.testing.PlexusTest;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Tests the API of the
@@ -66,83 +72,73 @@ import org.codehaus.plexus.PlexusTestCase;
  * @author <a href="mailto:dlr@finemaltcoding.com">Daniel Rall</a>
  * @author <a href="mailto:jason@zenplex.com">Jason van Zyl</a>
  */
-public class DefaultI18NTest extends PlexusTestCase {
+@PlexusTest
+public class DefaultI18NTest {
+    @Inject
     private I18N i18n;
 
-    protected void setUp() throws Exception {
-        super.setUp();
-
+    @BeforeEach
+    protected void setUp() {
         /* Set an unsupported locale to default to ensure we do not get unexpected matches */
         Locale.setDefault(new Locale("jp"));
-
-        i18n = (I18N) lookup(I18N.ROLE);
     }
 
+    @Test
     public void testLocalization() {
         String s0 = i18n.getString(null, null, "key1");
-
-        assertEquals("Unable to retrieve localized text for locale: default", s0, "[] value1");
+        assertEquals("[] value1", s0, "Unable to retrieve localized text for locale: default");
 
         String s1 = i18n.getString(null, new Locale("en", "US"), "key2");
-
-        assertEquals("Unable to retrieve localized text for locale: en-US", s1, "[en_US] value2");
+        assertEquals("[en_US] value2", s1, "Unable to retrieve localized text for locale: en-US");
 
         String s2 = i18n.getString("org.codehaus.plexus.i18n.BarBundle", new Locale("ko", "KR"), "key3");
-
-        assertEquals("Unable to retrieve localized text for locale: ko-KR", s2, "[ko] value3");
+        assertEquals("[ko] value3", s2, "Unable to retrieve localized text for locale: ko-KR");
 
         String s3 = i18n.getString("org.codehaus.plexus.i18n.BarBundle", new Locale("ja"), "key1");
-
-        assertEquals("Unable to fall back from non-existant locale: jp", "[] value1", s3);
+        assertEquals("[] value1", s3, "Unable to fall back from non-existant locale: jp");
 
         String s4 = i18n.getString("org.codehaus.plexus.i18n.FooBundle", new Locale("fr"), "key3");
-
-        assertEquals("Unable to retrieve localized text for locale: fr", s4, "[fr] value3");
+        assertEquals("[fr] value3", s4, "Unable to retrieve localized text for locale: fr");
 
         String s5 = i18n.getString("org.codehaus.plexus.i18n.FooBundle", new Locale("fr", "FR"), "key3");
-
-        assertEquals("Unable to retrieve localized text for locale: fr-FR", s5, "[fr] value3");
+        assertEquals("[fr] value3", s5, "Unable to retrieve localized text for locale: fr-FR");
 
         String s6 = i18n.getString("org.codehaus.plexus.i18n.i18n", null, "key1");
-
-        assertEquals("Unable to retrieve localized properties for locale: default", "[] value1", s6);
+        assertEquals("[] value1", s6, "Unable to retrieve localized properties for locale: default");
 
         Locale old = Locale.getDefault();
         Locale.setDefault(Locale.FRENCH);
         try {
             String s7 = i18n.getString("org.codehaus.plexus.i18n.i18n", Locale.ENGLISH, "key1");
-
-            assertEquals("Not picking up new default locale: fr", "[fr] value1", s7);
+            assertEquals("[fr] value1", s7, "Not picking up new default locale: fr");
 
             String s8 = i18n.getString("org.codehaus.plexus.i18n.i18n", Locale.ITALIAN, "key1");
-
-            assertEquals("Unable to retrieve localized properties for locale: it", "[it] value1", s8);
+            assertEquals("[it] value1", s8, "Unable to retrieve localized properties for locale: it");
 
         } finally {
             Locale.setDefault(old);
         }
     }
 
+    @Test
     public void testLocalizedMessagesWithFormatting() {
         // Format methods
 
         String s6 = i18n.format("org.codehaus.plexus.i18n.i18n", null, "thanks.message", "jason");
-
-        assertEquals(s6, "Thanks jason!");
+        assertEquals("Thanks jason!", s6);
 
         String s7 = i18n.format("org.codehaus.plexus.i18n.i18n", null, "thanks.message1", "jason", "van zyl");
-
-        assertEquals(s7, "Thanks jason van zyl!");
+        assertEquals("Thanks jason van zyl!", s7);
 
         String s8 = i18n.format(
                 "org.codehaus.plexus.i18n.i18n", null, "thanks.message2", new Object[] {"jason", "van zyl"});
 
-        assertEquals(s8, "Thanks jason van zyl!");
+        assertEquals("Thanks jason van zyl!", s8);
     }
 
+    @Test
     public void testLocalizedMessagesWithNonStandardLocale() {
         String s0 = i18n.getString("name", new Locale("xx"));
-
         assertEquals("plexus", s0);
     }
 }
