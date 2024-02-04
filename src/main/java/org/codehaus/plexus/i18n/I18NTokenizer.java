@@ -16,12 +16,7 @@ package org.codehaus.plexus.i18n;
  * limitations under the License.
  */
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.Locale;
-import java.util.NoSuchElementException;
-import java.util.StringTokenizer;
+import java.util.*;
 
 /**
  * Parses the HTTP <code>Accept-Language</code> header as per section
@@ -32,7 +27,7 @@ import java.util.StringTokenizer;
  *
  * TODO Move this class out of here as its purely web related.
  */
-public class I18NTokenizer implements Iterator {
+public class I18NTokenizer implements Iterator<Locale> {
     /**
      * Separates elements of the <code>Accept-Language</code> HTTP
      * header.
@@ -48,12 +43,12 @@ public class I18NTokenizer implements Iterator {
      * The default quality value for an <code>AcceptLanguage</code>
      * object.
      */
-    private static final Float DEFAULT_QUALITY = new Float(1.0f);
+    private static final float DEFAULT_QUALITY = 1.0f;
 
     /**
      * The parsed locales.
      */
-    private ArrayList locales = new ArrayList(3);
+    private final List<AcceptLanguage> locales = new ArrayList<>(3);
 
     /**
      * Parses the <code>Accept-Language</code> header.
@@ -76,7 +71,7 @@ public class I18NTokenizer implements Iterator {
                 if ((index = q.indexOf('=')) != -1) {
                     try {
                         acceptLang.quality = Float.valueOf(q.substring(index + 1));
-                    } catch (NumberFormatException useDefault) {
+                    } catch (NumberFormatException ignored) {
                     }
                 }
             }
@@ -96,7 +91,7 @@ public class I18NTokenizer implements Iterator {
         }
 
         // Sort by quality in descending order.
-        Collections.sort(locales, Collections.reverseOrder());
+        locales.sort(Collections.reverseOrder());
     }
 
     /**
@@ -113,11 +108,11 @@ public class I18NTokenizer implements Iterator {
      * @return The next highest-rated <code>Locale</code>.
      * @throws NoSuchElementException No more locales.
      */
-    public Object next() {
+    public Locale next() {
         if (locales.isEmpty()) {
             throw new NoSuchElementException();
         }
-        return ((AcceptLanguage) locales.remove(0)).locale;
+        return locales.remove(0).locale;
     }
 
     /**
@@ -131,7 +126,7 @@ public class I18NTokenizer implements Iterator {
      * Struct representing an element of the HTTP
      * <code>Accept-Language</code> header.
      */
-    private class AcceptLanguage implements Comparable {
+    private static class AcceptLanguage implements Comparable<AcceptLanguage> {
         /**
          * The language and country.
          */
@@ -143,8 +138,8 @@ public class I18NTokenizer implements Iterator {
          */
         Float quality = DEFAULT_QUALITY;
 
-        public final int compareTo(Object acceptLang) {
-            return quality.compareTo(((AcceptLanguage) acceptLang).quality);
+        public final int compareTo(AcceptLanguage acceptLang) {
+            return quality.compareTo(acceptLang.quality);
         }
     }
 }

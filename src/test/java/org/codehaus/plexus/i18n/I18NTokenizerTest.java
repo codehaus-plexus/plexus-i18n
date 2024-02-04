@@ -56,9 +56,9 @@ package org.codehaus.plexus.i18n;
 
 import java.util.Locale;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Test case for the locale tokenizer.
@@ -67,29 +67,15 @@ import junit.framework.TestSuite;
  * @author <a href="mailto:jason@zenplex.com">Jason van Zyl</a>
  * @version $Id: I18NTokenizerTest.java 831 2004-06-16 17:01:12Z jvanzyl $
  */
-public class I18NTokenizerTest extends TestCase {
-    private static final String HEADER = "en, es;q=0.8, zh-TW;q=0.1";
-
-    public I18NTokenizerTest(String name) {
-        super(name);
-    }
-
-    public static Test suite() {
-        return new TestSuite(I18NTokenizerTest.class);
-    }
-
+public class I18NTokenizerTest {
+    @Test
     public void testLocaleTokenizer() {
-        try {
-            I18NTokenizer tok = new I18NTokenizer(HEADER);
-            Locale locale = (Locale) tok.next();
-            assertEquals("Either wrong language or order parsing: " + locale, locale.getLanguage(), "en");
-            locale = (Locale) tok.next();
-            assertEquals("Either wrong language or order parsing: " + locale, locale.getLanguage(), "es");
-            locale = (Locale) tok.next();
-            assertEquals("Either wrong country or order parsing: " + locale, locale.getCountry(), "TW");
-        } catch (Exception e) {
-            e.printStackTrace();
-            fail();
-        }
+        I18NTokenizer tok = new I18NTokenizer("en, es;q=0.8, zh-TW;q=0.1");
+        Locale locale = tok.next();
+        assertEquals("en", locale.getLanguage(), "Either wrong language or order parsing: " + locale);
+        locale = tok.next();
+        assertEquals("es", locale.getLanguage(), "Either wrong language or order parsing: " + locale);
+        locale = tok.next();
+        assertEquals("TW", locale.getCountry(), "Either wrong country or order parsing: " + locale);
     }
 }
