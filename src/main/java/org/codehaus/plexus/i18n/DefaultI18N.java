@@ -17,6 +17,7 @@ package org.codehaus.plexus.i18n;
  */
 
 import javax.inject.Named;
+import javax.inject.Singleton;
 
 import java.text.MessageFormat;
 import java.util.HashMap;
@@ -32,6 +33,7 @@ import org.slf4j.LoggerFactory;
  *
  */
 @Named
+@Singleton
 public class DefaultI18N implements I18N {
 
     private final Logger log = LoggerFactory.getLogger(DefaultI18N.class);
