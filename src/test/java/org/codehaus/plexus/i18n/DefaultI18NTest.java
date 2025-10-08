@@ -110,7 +110,7 @@ public class DefaultI18NTest {
         Locale.setDefault(Locale.FRENCH);
         try {
             String s7 = i18n.getString("org.codehaus.plexus.i18n.i18n", Locale.ENGLISH, "key1");
-            assertEquals("[fr] value1", s7, "Not picking up new default locale: fr");
+            assertEquals("[] value1", s7, "Should not fall back to default locale, use root bundle instead");
 
             String s8 = i18n.getString("org.codehaus.plexus.i18n.i18n", Locale.ITALIAN, "key1");
             assertEquals("[it] value1", s8, "Unable to retrieve localized properties for locale: it");
@@ -140,5 +140,26 @@ public class DefaultI18NTest {
     public void testLocalizedMessagesWithNonStandardLocale() {
         String s0 = i18n.getString("name", new Locale("xx"));
         assertEquals("plexus", s0);
+    }
+
+    @Test
+    public void testNoFallbackToDefaultLocale() {
+        // Save the current default locale
+        Locale oldDefault = Locale.getDefault();
+
+        try {
+            // Set default locale to German
+            Locale.setDefault(Locale.GERMAN);
+
+            // Request a locale that doesn't have a bundle (Hebrew - Israel)
+            // Expected: should get the root bundle with "[] value1"
+            // Bug: currently gets the German bundle with "[de] value1"
+            String result = i18n.getString("org.codehaus.plexus.i18n.i18n", new Locale("iw", "IL"), "key1");
+
+            assertEquals("[] value1", result, "Should get root bundle, not default locale bundle");
+        } finally {
+            // Restore the original default locale
+            Locale.setDefault(oldDefault);
+        }
     }
 }

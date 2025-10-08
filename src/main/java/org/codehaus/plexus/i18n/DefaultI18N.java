@@ -298,7 +298,10 @@ public class DefaultI18N implements I18N {
         if (rb == null) {
             bundlesByLocale = (bundlesByLocale == null ? new HashMap<>(3) : new HashMap<>(bundlesByLocale));
             try {
-                rb = ResourceBundle.getBundle(bundleName, locale);
+                rb = ResourceBundle.getBundle(
+                        bundleName,
+                        locale,
+                        ResourceBundle.Control.getNoFallbackControl(ResourceBundle.Control.FORMAT_DEFAULT));
             } catch (MissingResourceException e) {
                 rb = findBundleByLocale(bundleName, locale, bundlesByLocale);
                 if (rb == null) {
@@ -371,7 +374,10 @@ public class DefaultI18N implements I18N {
      */
     private ResourceBundle getBundleIgnoreException(String bundleName, Locale locale) {
         try {
-            return ResourceBundle.getBundle(bundleName, locale);
+            return ResourceBundle.getBundle(
+                    bundleName,
+                    locale,
+                    ResourceBundle.Control.getNoFallbackControl(ResourceBundle.Control.FORMAT_DEFAULT));
         } catch (MissingResourceException ignored) {
             return null;
         }
