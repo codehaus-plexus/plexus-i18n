@@ -73,7 +73,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * @author <a href="mailto:jason@zenplex.com">Jason van Zyl</a>
  */
 @PlexusTest
-public class DefaultI18NTest {
+class DefaultI18NTest {
     @Inject
     private I18N i18n;
 
@@ -84,7 +84,7 @@ public class DefaultI18NTest {
     }
 
     @Test
-    public void testLocalization() {
+    void localization() {
         String s0 = i18n.getString(null, null, "key1");
         assertEquals("[] value1", s0, "Unable to retrieve localized text for locale: default");
 
@@ -121,7 +121,7 @@ public class DefaultI18NTest {
     }
 
     @Test
-    public void testLocalizedMessagesWithFormatting() {
+    void localizedMessagesWithFormatting() {
         // Format methods
 
         String s6 = i18n.format("org.codehaus.plexus.i18n.i18n", null, "thanks.message", "jason");
@@ -137,13 +137,13 @@ public class DefaultI18NTest {
     }
 
     @Test
-    public void testLocalizedMessagesWithNonStandardLocale() {
+    void localizedMessagesWithNonStandardLocale() {
         String s0 = i18n.getString("name", new Locale("xx"));
         assertEquals("plexus", s0);
     }
 
     @Test
-    public void testNoFallbackToDefaultLocale() {
+    void noFallbackToDefaultLocale() {
         // Save the current default locale
         Locale oldDefault = Locale.getDefault();
 
