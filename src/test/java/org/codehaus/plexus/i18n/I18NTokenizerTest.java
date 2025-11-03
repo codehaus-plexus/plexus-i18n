@@ -67,9 +67,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * @author <a href="mailto:jason@zenplex.com">Jason van Zyl</a>
  * @version $Id: I18NTokenizerTest.java 831 2004-06-16 17:01:12Z jvanzyl $
  */
-public class I18NTokenizerTest {
+class I18NTokenizerTest {
     @Test
-    public void testLocaleTokenizer() {
+    void localeTokenizer() {
         I18NTokenizer tok = new I18NTokenizer("en, es;q=0.8, zh-TW;q=0.1");
         Locale locale = tok.next();
         assertEquals("en", locale.getLanguage(), "Either wrong language or order parsing: " + locale);
