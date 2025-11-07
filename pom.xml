@@ -10,14 +10,14 @@
   </parent>
 
   <artifactId>plexus-i18n</artifactId>
-  <version>1.1.0</version>
+  <version>1.1.1-SNAPSHOT</version>
 
   <name>Plexus I18N Component</name>
 
   <scm>
     <connection>scm:git:https://github.com/codehaus-plexus/plexus-i18n.git</connection>
     <developerConnection>${project.scm.connection}</developerConnection>
-    <tag>plexus-i18n-1.1.0</tag>
+    <tag>HEAD</tag>
     <url>https://github.com/codehaus-plexus/plexus-i18n</url>
   </scm>
   <issueManagement>
@@ -33,7 +33,7 @@
 
   <properties>
     <slf4jVersion>1.7.36</slf4jVersion>
-    <project.build.outputTimestamp>2025-11-07T17:32:13Z</project.build.outputTimestamp>
+    <project.build.outputTimestamp>2025-11-07T17:32:21Z</project.build.outputTimestamp>
   </properties>
 
   <dependencies>
