@@ -13,6 +13,8 @@
   <version>1.1.1-SNAPSHOT</version>
 
   <name>Plexus I18N Component</name>
+  <description>Looks up localised messages from resource bundles, with a default bundle and
+    locale.</description>
 
   <scm>
     <connection>scm:git:https://github.com/codehaus-plexus/plexus-i18n.git</connection>
