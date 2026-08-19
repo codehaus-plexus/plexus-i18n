@@ -20,7 +20,6 @@ Versions before `1.0.0` were published as `1.0-beta-*` for many years; `1.0.0` a
 <dependency>
   <groupId>org.codehaus.plexus</groupId>
   <artifactId>plexus-i18n</artifactId>
-  <version>1.1.0</version>
 </dependency>
 ```
 
@@ -34,6 +33,8 @@ String greeting = i18n.getString("report.title");
 String inFrench = i18n.getString("report.title", Locale.FRENCH);
 String fromBundle = i18n.getString("my-bundle", Locale.FRENCH, "report.title");
 ```
+
+Check the badge above for the current version.
 
 `I18N` is a JSR-330 singleton, so any [Eclipse Sisu](https://www.eclipse.org/sisu/) or Guice context can inject it. No Plexus container is involved — that was retired long ago, despite the name.
 
