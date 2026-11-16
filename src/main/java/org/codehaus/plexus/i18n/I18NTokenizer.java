@@ -97,6 +97,7 @@ public class I18NTokenizer implements Iterator<Locale> {
     /**
      * @return Whether there are more locales.
      */
+    @Override
     public boolean hasNext() {
         return !locales.isEmpty();
     }
@@ -108,6 +109,7 @@ public class I18NTokenizer implements Iterator<Locale> {
      * @return The next highest-rated <code>Locale</code>.
      * @throws NoSuchElementException No more locales.
      */
+    @Override
     public Locale next() {
         if (locales.isEmpty()) {
             throw new NoSuchElementException();
@@ -118,6 +120,7 @@ public class I18NTokenizer implements Iterator<Locale> {
     /**
      * Not implemented.
      */
+    @Override
     public final void remove() {
         throw new UnsupportedOperationException(getClass().getName() + " does not support remove()");
     }
@@ -138,6 +141,7 @@ public class I18NTokenizer implements Iterator<Locale> {
          */
         Float quality = DEFAULT_QUALITY;
 
+        @Override
         public final int compareTo(AcceptLanguage acceptLang) {
             return quality.compareTo(acceptLang.quality);
         }
