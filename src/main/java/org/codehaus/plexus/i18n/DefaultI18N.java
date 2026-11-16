@@ -55,30 +55,37 @@ public class DefaultI18N implements I18N {
         this.bundleNames = bundleNames != null ? bundleNames.clone() : new String[0];
         initialize();
     }
+
     // ----------------------------------------------------------------------
     // Accessors
     // ----------------------------------------------------------------------
 
+    @Override
     public String getDefaultLanguage() {
         return Locale.getDefault().getLanguage();
     }
 
+    @Override
     public String getDefaultCountry() {
         return Locale.getDefault().getCountry();
     }
 
+    @Override
     public String getDefaultBundleName() {
         return defaultBundleName;
     }
 
+    @Override
     public String[] getBundleNames() {
         return bundleNames.clone();
     }
 
+    @Override
     public ResourceBundle getBundle() {
         return getBundle(getDefaultBundleName(), (Locale) null);
     }
 
+    @Override
     public ResourceBundle getBundle(String bundleName) {
         return getBundle(bundleName, (Locale) null);
     }
@@ -92,6 +99,7 @@ public class DefaultI18N implements I18N {
      * @param languageHeader A String with the language header.
      * @return A localized ResourceBundle.
      */
+    @Override
     public ResourceBundle getBundle(String bundleName, String languageHeader) {
         return getBundle(bundleName, getLocale(languageHeader));
     }
@@ -106,6 +114,7 @@ public class DefaultI18N implements I18N {
      *                   indicated by the default language and country).
      * @return A localized ResourceBundle.
      */
+    @Override
     public ResourceBundle getBundle(String bundleName, Locale locale) {
         // Assure usable inputs.
         bundleName = bundleName == null ? getDefaultBundleName() : bundleName.trim();
@@ -145,6 +154,7 @@ public class DefaultI18N implements I18N {
     /**
      * @see I18N#getLocale(String)
      */
+    @Override
     public Locale getLocale(String header) {
         if (header != null && !header.isEmpty()) {
             I18NTokenizer tok = new I18NTokenizer(header);
@@ -157,10 +167,12 @@ public class DefaultI18N implements I18N {
         return Locale.getDefault();
     }
 
+    @Override
     public String getString(String key) {
         return getString(key, null);
     }
 
+    @Override
     public String getString(String key, Locale locale) {
         return getString(getDefaultBundleName(), locale, key);
     }
@@ -169,6 +181,7 @@ public class DefaultI18N implements I18N {
      * @throws MissingResourceException Specified key cannot be matched.
      * @see I18N#getString(String, Locale, String)
      */
+    @Override
     public String getString(String bundleName, Locale locale, String key) {
         String value;
         if (locale == null) {
@@ -206,10 +219,12 @@ public class DefaultI18N implements I18N {
         return value;
     }
 
+    @Override
     public String format(String key, Object arg1) {
         return format(defaultBundleName, Locale.getDefault(), key, new Object[] {arg1});
     }
 
+    @Override
     public String format(String key, Object arg1, Object arg2) {
         return format(defaultBundleName, Locale.getDefault(), key, new Object[] {arg1, arg2});
     }
@@ -217,6 +232,7 @@ public class DefaultI18N implements I18N {
     /**
      * @see I18N#format(String, Locale, String, Object)
      */
+    @Override
     public String format(String bundleName, Locale locale, String key, Object arg1) {
         return format(bundleName, locale, key, new Object[] {arg1});
     }
@@ -224,6 +240,7 @@ public class DefaultI18N implements I18N {
     /**
      * @see I18N#format(String, Locale, String, Object, Object)
      */
+    @Override
     public String format(String bundleName, Locale locale, String key, Object arg1, Object arg2) {
         return format(bundleName, locale, key, new Object[] {arg1, arg2});
     }
@@ -237,6 +254,7 @@ public class DefaultI18N implements I18N {
      * @return Localized, formatted text identified by
      *         <code>key</code>.
      */
+    @Override
     public String format(String bundleName, Locale locale, String key, Object[] args) {
         if (locale == null) {
             // When formatting Date objects and such, MessageFormat
