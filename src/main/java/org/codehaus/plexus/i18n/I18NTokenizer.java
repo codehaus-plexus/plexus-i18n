@@ -43,7 +43,7 @@ public class I18NTokenizer implements Iterator<Locale> {
      * The default quality value for an <code>AcceptLanguage</code>
      * object.
      */
-    private static final float DEFAULT_QUALITY = 1.0f;
+    private static final float DEFAULT_QUALITY = 1.0F;
 
     /**
      * The parsed locales.

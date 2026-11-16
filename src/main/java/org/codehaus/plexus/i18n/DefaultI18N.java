@@ -108,7 +108,7 @@ public class DefaultI18N implements I18N {
      */
     public ResourceBundle getBundle(String bundleName, Locale locale) {
         // Assure usable inputs.
-        bundleName = (bundleName == null ? getDefaultBundleName() : bundleName.trim());
+        bundleName = bundleName == null ? getDefaultBundleName() : bundleName.trim();
 
         // ----------------------------------------------------------------------
         // A hack to make sure the properties files are always checked
@@ -294,9 +294,9 @@ public class DefaultI18N implements I18N {
     private synchronized ResourceBundle cacheBundle(String bundleName, Locale locale) throws MissingResourceException {
         Map<Locale, ResourceBundle> bundlesByLocale = bundles.get(bundleName);
 
-        ResourceBundle rb = (bundlesByLocale == null ? null : bundlesByLocale.get(locale));
+        ResourceBundle rb = bundlesByLocale == null ? null : bundlesByLocale.get(locale);
         if (rb == null) {
-            bundlesByLocale = (bundlesByLocale == null ? new HashMap<>(3) : new HashMap<>(bundlesByLocale));
+            bundlesByLocale = bundlesByLocale == null ? new HashMap<>(3) : new HashMap<>(bundlesByLocale);
             try {
                 rb = ResourceBundle.getBundle(
                         bundleName,
