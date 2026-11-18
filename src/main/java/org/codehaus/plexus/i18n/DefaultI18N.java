@@ -275,9 +275,7 @@ public class DefaultI18N implements I18N {
     public void initialize() {
         bundles = new HashMap<>();
         initializeBundleNames();
-        if ("true".equals(System.getProperty("PLEXUS_DEV_MODE"))) {
-            devMode = true;
-        }
+        devMode = "true".equals(System.getProperty("PLEXUS_DEV_MODE"));
     }
 
     // ----------------------------------------------------------------------
