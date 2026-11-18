@@ -34,8 +34,6 @@ String inFrench = i18n.getString("report.title", Locale.FRENCH);
 String fromBundle = i18n.getString("my-bundle", Locale.FRENCH, "report.title");
 ```
 
-Check the badge above for the current version.
-
 `I18N` is a JSR-330 singleton, so any [Eclipse Sisu](https://www.eclipse.org/sisu/) or Guice context can inject it. No Plexus container is involved — that was retired long ago, despite the name.
 
 ## Requirements
